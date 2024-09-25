@@ -41,7 +41,7 @@ rule kmer_db:
     input:
          "results/01_genomes/allgenomes.fna"
     output:
-        "results/02_kmers/allgenomes.tsv"
+        "results/02_kmers/allgenomes.jf"
     params:
         jobname="allgenomes.db",
         kmersize=21,
@@ -55,7 +55,28 @@ rule kmer_db:
         "workflow/envs/env.yml"
     shell:
         """
-        jellyfish count -m {params.kmersize} -s 3300M -o {output} --out-counter-len 1 -L {params.minkmer} -t {threads} --text {input}
+        jellyfish count -m {params.kmersize} -s 3300M -o {output} --out-counter-len 1 -L {params.minkmer} -t {threads} {input}
+        """
+
+rule kmer_db_dump:
+    input:
+         "results/02_kmers/allgenomes.jf"
+    output:
+        "results/02_kmers/allgenomes.tsv"
+    params:
+        jobname="allgenomes.db",
+        kmersize=21,
+        minkmer=5
+    threads:
+        1
+    resources:
+        mem_gb=16,
+        time=10
+    conda:
+        "workflow/envs/env.yml"
+    shell:
+        """
+        jellyfish dump -o {output} {input}
         """
 
 rule browse_kmers:
