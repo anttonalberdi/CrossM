@@ -79,7 +79,7 @@ def main():
             
             # Create a FASTQ entry for each contig
             quality_scores = convert_counts_to_quality_scores(max_kmer_counts)
-            fastq_entry = f"@{record.id}\n{sequence}\n+\n{' '.join(quality_scores)}\n"
+            fastq_entry = f"@{record.id}\n{sequence}\n+\n{''.join(quality_scores)}\n"
             fastq_out.write(fastq_entry)
     
     print(f"Final FASTQ file saved to {args.output_fastq}")
