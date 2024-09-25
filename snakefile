@@ -78,7 +78,7 @@ rule kmer_db_dump:
         "workflow/envs/env.yml"
     shell:
         """
-        jellyfish dump -o {output} {input}
+        jellyfish dump -c -t -o {output} {input}
         """
 
 rule browse_kmers:
