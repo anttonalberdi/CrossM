@@ -32,7 +32,7 @@ rule concatenate_fasta:
         time=30
     shell:
         """
-        python workflow/scripts/concatenate_fasta.py {output} {input}
+        cat {input} > {output}
         """
 
 # Jellyfish count renamed fasta file for downstream kmer count
