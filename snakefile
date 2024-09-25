@@ -18,7 +18,9 @@ genomes, = glob_wildcards("resources/genomes/{genome}.fa")
 rule all:
     input:
         expand("results/03_cross/{genome}.fq", genome=genomes),
-        expand("results/03_cross/{genome}.bed", genome=genomes)
+        expand("results/03_cross/{genome}.bed", genome=genomes),
+        expand("results/03_cross/{genome}.hist.png", genome=genomes),
+        expand("results/03_cross/{genome}.cross.png", genome=genomes)
 
 rule concatenate_fasta:
     input:
