@@ -93,7 +93,7 @@ rule browse_kmers:
         1
     resources:
         mem_gb=8,
-        time=30
+        time=10
     conda:
         "workflow/envs/env.yml"
     shell:
