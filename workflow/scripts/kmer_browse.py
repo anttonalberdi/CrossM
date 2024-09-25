@@ -58,20 +58,20 @@ def convert_counts_to_quality_scores(counts):
 # Generate and save the histogram of k-mer counts
 def generate_histogram(quality_scores, output_path):
     plt.figure()
-    plt.hist(quality_scores, bins=20, color='blue', edgecolor='black')
-    plt.title('Distribution of Quality Scores')
-    plt.xlabel('Phred Quality Score')
-    plt.ylabel('Frequency')
+    plt.hist(counts, bins=10, color='blue', edgecolor='black')
+    plt.title('Distribution of kmer overlap')
+    plt.xlabel('Kmer overlap')
+    plt.ylabel('Millions of bases')
     plt.savefig(output_path)
     plt.close()
 
 # Generate and save the line plot of k-mer counts
 def generate_line_plot(quality_scores, boundaries, output_path):
     plt.figure()
-    plt.plot(quality_scores, color='green')
-    plt.title('Quality Scores Across All Positions (with contig separators)')
-    plt.xlabel('Position in Sequences')
-    plt.ylabel('Phred Quality Score')
+    plt.plot(counts, color='green')
+    plt.title('Kmer overlap across the genome (with contig separators)')
+    plt.xlabel('Position in sequences (millions of bases)')
+    plt.ylabel('Kmer overlap')
 
     # Add vertical lines to mark the end of each contig
     for boundary in boundaries[:-1]:  # Exclude the final boundary (end of the last contig)
