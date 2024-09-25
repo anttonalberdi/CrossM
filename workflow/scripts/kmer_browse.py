@@ -45,6 +45,16 @@ def write_summarized_bed_file(bed_file_handle, record_id, max_counts):
     # Write the final block
     bed_file_handle.write(f"{record_id}\t{start}\t{len(max_counts)}\t{current_count}\n")
 
+# Convert counts to FASTQ-compatible quality scores
+def convert_counts_to_quality_scores(counts):
+    quality_scores = []
+    for count in counts:
+        # Cap the count between 0 and 93 (since quality scores typically range from 33 to 126)
+        score = min(93, max(0, count))
+        # Convert count to ASCII (Phred quality score + 33)
+        quality_scores.append(chr(score + 33))
+    return ''.join(quality_scores)
+
 # Generate and save the histogram of k-mer counts
 def generate_histogram(kmer_counts, output_path):
     plt.figure()
