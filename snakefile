@@ -7,6 +7,7 @@
 # If genomes are not split: seqkit split -i --id-regexp "^([^@]+)" --by-id-prefix "" --out-dir . drep.0.95.fa
 # module purge && module load snakemake/7.20.0 mamba/1.3.1
 # export XDG_CACHE_HOME=/maps/projects/mjolnir1/people/jpl786/.cache
+# export CONDA_PKGS_DIRS=/maps/projects/mjolnir1/people/jpl786/
 # snakemake -j 20 --cluster 'sbatch -o log/{params.jobname}-slurm-%j.out --mem {resources.mem_gb}G --time {resources.time} -c {threads} --job-name={params.jobname} -v'   --use-conda --conda-frontend mamba --conda-prefix conda --latency-wait 600
 
 
@@ -71,7 +72,7 @@ rule browse_kmers:
         1
     resources:
         mem_gb=8,
-        time=5
+        time=30
     conda:
         "workflow/envs/env.yml"
     shell:
