@@ -55,7 +55,7 @@ rule kmer_db:
     shell:
         """
         module load jellyfish/2.2.10
-        jellyfish count -m {params.kmersize} -s 3300M -o {output} --out-counter-len 1 -L {params.minkmer} -t --text {input}
+        jellyfish count -m {params.kmersize} -s 3300M -o {output} --out-counter-len 1 -L {params.minkmer} -t {threads} --text {input}
         """
 
 rule browse_kmers:
