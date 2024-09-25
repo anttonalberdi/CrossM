@@ -51,7 +51,7 @@ rule kmer_db:
         mem_gb=16,
         time=60
     conda:
-        "envs/env.yml"
+        "workflow/envs/env.yml"
     shell:
         """
         jellyfish count -m {params.kmersize} -s 3300M -o {output} --out-counter-len 1 -L {params.minkmer} -t {threads} --text {input}
@@ -73,7 +73,7 @@ rule browse_kmers:
         mem_gb=8,
         time=5
     conda:
-        "envs/env.yml"
+        "workflow/envs/env.yml"
     shell:
         """
         python workflow/scripts/kmer_browse.py \
