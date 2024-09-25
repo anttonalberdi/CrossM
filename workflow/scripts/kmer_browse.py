@@ -46,11 +46,13 @@ def write_summarized_bed_file(bed_file_handle, record_id, max_counts):
 
 # Convert counts to FASTQ-compatible quality scores
 def convert_counts_to_quality_scores(counts):
-    # Store the raw counts in FASTQ as space-separated strings
     quality_scores = []
     for count in counts:
-        quality_scores.append(str(count))  # Directly store count as string
-    return quality_scores
+        # Cap the count between 0 and 93 (since quality scores typically range from 33 to 126)
+        score = min(93, max(0, count))
+        # Convert count to ASCII (Phred quality score + 33)
+        quality_scores.append(chr(score + 33))
+    return ''.join(quality_scores)
 
 def main():
     # Argument parsing
