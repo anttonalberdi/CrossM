@@ -57,8 +57,8 @@ def convert_counts_to_quality_scores(counts):
 
 # Generate and save the histogram of k-mer counts
 def generate_histogram(kmer_counts, output_path):
-    plt.figure()
-    plt.hist(kmer_counts, bins=10, color='blue', edgecolor='black')
+    plt.figure(figsize=(16, 6), dpi=100)
+    plt.hist(kmer_counts, bins=100, color='blue', edgecolor='black')
     plt.title('Distribution of k-mer counts')
     plt.xlabel('K-mer count')
     plt.ylabel('Frequency (number of nucleotides)')
@@ -67,7 +67,7 @@ def generate_histogram(kmer_counts, output_path):
 
 # Generate and save the line plot of k-mer counts
 def generate_line_plot(kmer_counts, boundaries, output_path):
-    plt.figure()
+    plt.figure(figsize=(16, 6), dpi=100)
     plt.plot(kmer_counts, color='green')
     plt.title('K-mer counts across the genome (with contig separators)')
     plt.xlabel('Position in sequences (nucleotides)')
