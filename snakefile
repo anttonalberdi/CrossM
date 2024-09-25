@@ -85,7 +85,9 @@ rule browse_kmers:
         kmerdb="results/02_kmers/allgenomes.tsv"
     output:
         fastq="results/03_cross/{genome}.fq",
-        bed="results/03_cross/{genome}.bed"
+        bed="results/03_cross/{genome}.bed",
+        hist="results/03_cross/{genome}.hist.png",
+        cross="results/03_cross/{genome}.cross.png"
     params:
         jobname="{genome}.kmer",
         kmersize=21
@@ -103,5 +105,7 @@ rule browse_kmers:
                 --kmer_count_file {input.kmerdb} \
                 --kmer_size {params.kmersize} \
                 --output_fastq {output.fastq} \
-                --output_bed {output.bed}
+                --output_bed {output.bed} \
+                --output_histogram {output.hist} \
+                --output_line_plot {output.cross}
         """
