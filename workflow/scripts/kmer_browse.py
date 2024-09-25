@@ -45,33 +45,23 @@ def write_summarized_bed_file(bed_file_handle, record_id, max_counts):
     # Write the final block
     bed_file_handle.write(f"{record_id}\t{start}\t{len(max_counts)}\t{current_count}\n")
 
-# Convert counts to FASTQ-compatible quality scores
-def convert_counts_to_quality_scores(counts):
-    quality_scores = []
-    for count in counts:
-        # Cap the count between 0 and 93 (since quality scores typically range from 33 to 126)
-        score = min(93, max(0, count))
-        # Convert count to ASCII (Phred quality score + 33)
-        quality_scores.append(chr(score + 33))
-    return ''.join(quality_scores)
-
 # Generate and save the histogram of k-mer counts
-def generate_histogram(quality_scores, output_path):
+def generate_histogram(kmer_counts, output_path):
     plt.figure()
-    plt.hist(counts, bins=10, color='blue', edgecolor='black')
-    plt.title('Distribution of kmer overlap')
-    plt.xlabel('Kmer overlap')
-    plt.ylabel('Millions of bases')
+    plt.hist(kmer_counts, bins=10, color='blue', edgecolor='black')
+    plt.title('Distribution of k-mer counts')
+    plt.xlabel('K-mer count')
+    plt.ylabel('Frequency (number of nucleotides)')
     plt.savefig(output_path)
     plt.close()
 
 # Generate and save the line plot of k-mer counts
-def generate_line_plot(quality_scores, boundaries, output_path):
+def generate_line_plot(kmer_counts, boundaries, output_path):
     plt.figure()
-    plt.plot(counts, color='green')
-    plt.title('Kmer overlap across the genome (with contig separators)')
-    plt.xlabel('Position in sequences (millions of bases)')
-    plt.ylabel('Kmer overlap')
+    plt.plot(kmer_counts, color='green')
+    plt.title('K-mer counts across the genome (with contig separators)')
+    plt.xlabel('Position in sequences (nucleotides)')
+    plt.ylabel('K-mer count')
 
     # Add vertical lines to mark the end of each contig
     for boundary in boundaries[:-1]:  # Exclude the final boundary (end of the last contig)
@@ -96,8 +86,8 @@ def main():
     # Load the k-mer count table
     kmer_dict = load_kmer_count_table(args.kmer_count_file)
 
-    # Variables to store all quality scores and boundaries for the line plot
-    all_quality_scores = []
+    # Variables to store all k-mer counts and boundaries for the line plot
+    all_kmer_counts = []
     contig_boundaries = []
 
     # Create the output FASTQ and summarized BED files
@@ -107,22 +97,22 @@ def main():
             sequence = str(record.seq)
             max_kmer_counts = get_kmer_max_counts_in_sequence(sequence, args.kmer_size, kmer_dict)
 
-            # Append quality scores and track the boundary for this contig
-            all_quality_scores.extend(max_kmer_counts)
+            # Append k-mer counts and track the boundary for this contig
+            all_kmer_counts.extend(max_kmer_counts)
             current_pos += len(max_kmer_counts)
             contig_boundaries.append(current_pos)
 
             # Write summarized BED file for each contig (FASTA record)
             write_summarized_bed_file(bed_out, record.id, max_kmer_counts)
             
-            # Create a FASTQ entry for each contig
+            # Create a FASTQ entry for each contig (optional step)
             quality_scores = convert_counts_to_quality_scores(max_kmer_counts)
             fastq_entry = f"@{record.id}\n{sequence}\n+\n{''.join(quality_scores)}\n"
             fastq_out.write(fastq_entry)
     
     # Generate and save the plots
-    generate_histogram(all_quality_scores, args.output_histogram)
-    generate_line_plot(all_quality_scores, contig_boundaries, args.output_line_plot)
+    generate_histogram(all_kmer_counts, args.output_histogram)
+    generate_line_plot(all_kmer_counts, contig_boundaries, args.output_line_plot)
     
     print(f"Final FASTQ file saved to {args.output_fastq}")
     print(f"Final summarized BED file saved to {args.output_bed}")
