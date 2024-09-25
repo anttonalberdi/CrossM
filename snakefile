@@ -54,7 +54,6 @@ rule kmer_db:
         "envs/env.yml"
     shell:
         """
-        module load jellyfish/2.2.10
         jellyfish count -m {params.kmersize} -s 3300M -o {output} --out-counter-len 1 -L {params.minkmer} -t {threads} --text {input}
         """
 
